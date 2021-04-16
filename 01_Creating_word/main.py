@@ -10,6 +10,8 @@ Created on Thu Apr 15 2021
 import pygame
 from pygame.locals import *
 from functions import World
+from functions import Player
+from numpy import random
 
 ## Initialize pygame
 pygame.init()
@@ -29,7 +31,7 @@ pygame.display.set_caption("A simple 2d Game")
 
 
 ## Define game variable
-tile_size = 200
+tile_size = 50
 
 
 
@@ -48,20 +50,37 @@ def draw_grid():
 
 
 
+# the world could be as bigger as this list size
 
 world_data = [
-    [1, 1, 1, 1, 1], #first row
-    [1, 0, 0, 0, 1], #second row
-    [1, 0, 0, 0, 1], #third row
-    [1, 0, 0, 0, 1], #fourth row
-    [1, 2, 2, 2, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 1], 
+    [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 2, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 7, 0, 5, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 1], 
+    [1, 7, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 1], 
+    [1, 0, 2, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 2, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1], 
+    [1, 0, 0, 0, 0, 0, 2, 2, 2, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1], 
+    [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+    [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+    [1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
 
-
-## Create dirt path
+## Create world
 dirt = World(data = world_data,  tile_size = tile_size)
 
+## Create player
+player = Player(x = 100, y = screen_height - 130)
 
 
 ## Create the main loop
@@ -73,7 +92,9 @@ while run:
     screen.blit(source = sky, dest = (0,0))
     screen.blit(source = sun, dest = (100,100))
 
-    print(dirt.draw(screen = screen))
+    dirt.draw(screen = screen)
+    player.update_player_position(screen = screen, screen_width = screen_width, screen_height = screen_height)
+
     draw_grid()
     
 
