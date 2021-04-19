@@ -54,9 +54,29 @@ class World():
 class Player():
     def __init__(self, x, y):
 
-        #load player image 
-        img = pygame.image.load("img/guy1.png")
-        self.player = pygame.transform.scale(img, (40,80))
+        #create a blank list
+        self.images_right = []
+        self.images_left = []
+
+        #track list index
+        self.index = 0
+        self.counter = 0
+
+        #load the images
+        for num in range(1,5):
+            img_path = "img/guy" + str(num) + ".png"
+            img_right = pygame.image.load(img_path)
+
+            player_right = pygame.transform.scale(img_right,(40,80))
+
+            #flip image 
+            player_left = pygame.transform.flip(player_right, True, False)
+
+            self.images_right.append(player_right)
+            self.images_left.append(player_left)
+        
+        #get images from list to display on screen
+        self.player = self.images_right[self.index]
         self.player_rect = self.player.get_rect()
 
         #get player position
@@ -64,7 +84,7 @@ class Player():
         self.player_rect.y = y
         self.player_jump_vel = 0
         self.player_jumped = False
-
+        self.direction = "right"
     
     def update_player_position(self, screen, screen_width, screen_height):
 
@@ -75,6 +95,7 @@ class Player():
 
         dx = 0
         dy = 0
+        walk_speed  = 5
 
         #get key press
         key = pygame.key.get_pressed()
@@ -82,10 +103,16 @@ class Player():
         #Add left move
         if key[pygame.K_LEFT]:
             dx -= 5
-        
+            self.direction = "left"
+
         #add right move
         if key[pygame.K_RIGHT]:
+            #change character position
             dx += 5
+            self.direction = "right"
+
+
+
 
         #add jump evevent
         if key[pygame.K_SPACE] and self.player_jumped == False:
@@ -95,6 +122,38 @@ class Player():
         #stopping jum event
         if key[pygame.K_SPACE] == False:
             self.player_jumped = False
+
+
+        # block code to handle with animation
+
+        #add code to star animation only if key is pressed
+        if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
+            self.counter += 1
+        
+       
+        #Add animation during the move
+        if self.counter > walk_speed:
+            self.counter = 0
+            self.index += 1
+            if self.index >= len(self.images_right):
+                self.index = 0
+            if self.direction == "right":
+                self.player = self.images_right[self.index]
+            if self.direction == "left":
+                self.player = self.images_left[self.index]
+
+        
+         #add guy to stop position
+        if key[pygame.K_RIGHT] == False and key[pygame.K_LEFT] == False:
+            self.counter = 0
+            if self.direction == "right":
+                self.player = self.images_right[0]
+            if self.direction == "left":
+                self.player = self.images_left[0]
+        
+       
+
+
         
 
         ## add gravity

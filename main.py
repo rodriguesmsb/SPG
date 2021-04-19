@@ -16,6 +16,11 @@ from numpy import random
 ## Initialize pygame
 pygame.init()
 
+## add frame rate to game
+clock = pygame.time.Clock()
+fps = 60
+
+
 ##  Set window dimension
 screen_width = 1000
 screen_height = 1000
@@ -87,6 +92,10 @@ player = Player(x = 100, y = screen_height - 130)
 run = True
 
 while run:
+
+    #limit the pc to run the game a specific fps
+    clock.tick(fps)
+  
     
     #draw the images on the screen
     screen.blit(source = sky, dest = (0,0))
