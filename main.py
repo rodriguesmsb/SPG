@@ -102,9 +102,12 @@ while run:
     screen.blit(source = sun, dest = (100,100))
 
     dirt.draw(screen = screen)
-    player.update_player_position(screen = screen, screen_width = screen_width, screen_height = screen_height)
+    player.update_player_position(screen = screen, 
+                                  screen_width = screen_width, 
+                                  screen_height = screen_height,
+                                  world = dirt)
 
-    draw_grid()
+   
     
 
     #add a way to close the game
