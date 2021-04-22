@@ -12,6 +12,8 @@ class World():
     def __init__(self, data, tile_size):
 
         self.tile_list = []
+        self.enemey_group = pygame.sprite.Group()
+
         dirt = pygame.image.load("img/dirt.png")
         grass = pygame.image.load("img/grass.png")
 
@@ -42,6 +44,9 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                if tile == 3:
+                    blob = Enemey(x = col_count * tile_size, y = row_count * tile_size + 15)
+                    self.enemey_group.add(blob)
                 col_count += 1
             row_count += 1
     
@@ -52,7 +57,35 @@ class World():
 
             #Add a rectangle at each img
             pygame.draw.rect(screen, (255,255,255), tile[1], 2)
-            
+
+
+#create enemey class
+#this class will be a child of pygame.sprite.Sprite)
+#pygame.sprite already have a draw and update method
+class Enemey(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("img/blob.png")
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+    
+    def update(self):
+        
+        self.rect.x += self.move_direction
+
+        #check for collision
+        self.move_counter += 1
+        if abs(self.move_counter) > 50:
+            self.move_direction *= -1
+            self.move_counter *= -1
+
+        
+
+
+
 
 class Player():
     def __init__(self, x, y):

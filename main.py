@@ -82,10 +82,12 @@ world_data = [
 
 
 ## Create world
-dirt = World(data = world_data,  tile_size = tile_size)
+world = World(data = world_data,  tile_size = tile_size)
 
 ## Create player
 player = Player(x = 100, y = screen_height - 130)
+
+## create enemeies
 
 
 ## Create the main loop
@@ -101,11 +103,15 @@ while run:
     screen.blit(source = sky, dest = (0,0))
     screen.blit(source = sun, dest = (100,100))
 
-    dirt.draw(screen = screen)
+    world.draw(screen = screen)
+
+    world.enemey_group.update()
+    world.enemey_group.draw(screen)
+
     player.update_player_position(screen = screen, 
                                   screen_width = screen_width, 
                                   screen_height = screen_height,
-                                  world = dirt)
+                                  world = world)
 
    
     
