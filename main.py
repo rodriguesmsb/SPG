@@ -9,8 +9,8 @@ Created on Thu Apr 15 2021
 ## Import necessary libraries
 import pygame
 from pygame.locals import *
-from functions import World
-from functions import Player
+from world import World
+from player import Player
 from numpy import random
 
 ## Initialize pygame
