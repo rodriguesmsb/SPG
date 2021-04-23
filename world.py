@@ -18,6 +18,7 @@ class World():
 
         dirt = pygame.image.load("img/dirt.png")
         grass = pygame.image.load("img/grass.png")
+        lava = pygame.image.load("img/lava.png")
 
         tile_size = tile_size
 
@@ -49,6 +50,14 @@ class World():
                 if tile == 3:
                     blob = Enemey(x = col_count * tile_size, y = row_count * tile_size + 15)
                     self.enemey_group.add(blob)
+                if tile == 6:
+                    img = pygame.transform.scale(lava,(tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+
                 col_count += 1
             row_count += 1
     
