@@ -104,10 +104,11 @@ while run:
     screen.blit(source = sun, dest = (100,100))
 
     world.draw(screen = screen)
-
-    world.enemey_group.update()
     world.enemey_group.draw(screen)
+    world.lava_group.draw(screen)
 
+    #add move
+    world.enemey_group.update()
     player.update_player_position(screen = screen, 
                                   screen_width = screen_width, 
                                   screen_height = screen_height,
