@@ -26,8 +26,6 @@ screen_width = 1000
 screen_height = 1000
 
 ## Create a window
-
-
 screen = pygame.display.set_mode(size = (screen_width, screen_height))
 
 ## Give a title to the window
@@ -37,6 +35,7 @@ pygame.display.set_caption("A simple 2d Game")
 
 ## Define game variable
 tile_size = 50
+game_over = False
 
 
 
@@ -85,7 +84,7 @@ world_data = [
 world = World(data = world_data,  tile_size = tile_size)
 
 ## Create player
-player = Player(x = 100, y = screen_height - 130)
+player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group])
 
 ## create enemeies
 
@@ -109,10 +108,11 @@ while run:
 
     #add move
     world.enemey_group.update()
-    player.update_player_position(screen = screen, 
+    game_over = player.update_player_position(screen = screen, 
                                   screen_width = screen_width, 
                                   screen_height = screen_height,
-                                  world = world)
+                                  world = world,
+                                  game_over = game_over)
 
    
     
