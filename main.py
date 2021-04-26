@@ -11,6 +11,7 @@ import pygame
 from pygame.locals import *
 from world import World
 from player import Player
+from button import Button
 from numpy import random
 
 ## Initialize pygame
@@ -45,6 +46,7 @@ sun = pygame.image.load("img/sun.png")
 sky = pygame.image.load("img/sky.png")
 dirt = "img/dirt.png"
 grass = "img/dirt.png"
+restart_image = pygame.image.load("img/restart_btn.png")
 
 #Createing a function to display a grid on screen
 def draw_grid():
@@ -86,7 +88,8 @@ world = World(data = world_data,  tile_size = tile_size)
 ## Create player
 player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group])
 
-## create enemeies
+## create menu
+restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) - 100, image = restart_image)
 
 
 ## Create the main loop
@@ -113,6 +116,9 @@ while run:
                                   screen_height = screen_height,
                                   world = world,
                                   game_over = game_over)
+    if game_over == True:
+        restart_button.draw(screen = screen)
+
 
    
     
@@ -121,6 +127,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+
 
     #update the screen
     pygame.display.update()
