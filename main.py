@@ -116,13 +116,18 @@ while run:
                                   screen_height = screen_height,
                                   world = world,
                                   game_over = game_over)
+    
+    #if play die draw restart button
     if game_over == True:
-        restart_button.draw(screen = screen)
-
+        if restart_button.draw(screen = screen):
+            #restart game again
+            player.reset(x = 100, 
+                         y = screen_height - 130, 
+                         enemies_list = [world.enemey_group, world.lava_group])
+            game_over = False
 
    
     
-
     #add a way to close the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

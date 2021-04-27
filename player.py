@@ -10,47 +10,8 @@ import pygame
 
 class Player():
     def __init__(self, x, y, enemies_list):
+        self.reset(x, y, enemies_list)
 
-        #Create a list for enemies
-        self.enemies_list = enemies_list
-
-        #create a blank list
-        self.images_right = []
-        self.images_left = []
-
-        #track list index
-        self.index = 0
-        self.counter = 0
-
-        #load the images
-        for num in range(1,5):
-            img_path = "img/guy" + str(num) + ".png"
-            img_right = pygame.image.load(img_path)
-
-            player_right = pygame.transform.scale(img_right,(40,80))
-
-            #flip image 
-            player_left = pygame.transform.flip(player_right, True, False)
-
-            self.images_right.append(player_right)
-            self.images_left.append(player_left)
-        
-
-        #ad a image for dead
-        self.dead_image = pygame.image.load("img/ghost.png")
-        #get images from list to display on screen
-        self.player = self.images_right[self.index]
-        self.rect = self.player.get_rect()
-
-        #get player position
-        self.rect.x = x
-        self.rect.y = y
-        self.width = self.player.get_width()
-        self.height = self.player.get_height()
-        self.player_jump_vel = 0
-        self.player_jumped = False
-        self.direction = "right"
-    
     def update_player_position(self, screen, screen_width, screen_height, world, game_over):
 
         # we need 3 steps to update position in this game
@@ -80,7 +41,7 @@ class Player():
                 self.direction = "right"
 
             #add jump evevent
-            if key[pygame.K_SPACE] and self.player_jumped == False:
+            if key[pygame.K_SPACE] and self.player_jumped == False and self.in_air == False:
                 self.player_jump_vel = -15
                 self.player_jumped = True
 
@@ -127,10 +88,12 @@ class Player():
         
             
             #check for collision
+            self.in_air = True
             for tile in world.tile_list:
                 #check for x collision
                 if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                     dx = 0
+
                 #check for collision on y direction
                 if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     #check if the player is bellow the ground i.e jumping
@@ -141,6 +104,7 @@ class Player():
                     #check if the player is above the ground i.e falling
                     elif self.player_jump_vel > 0:
                         dy = tile[1].top - self.rect.bottom
+                        self.in_air = False
 
             #check for collision with enemeis and lava
             if pygame.sprite.spritecollide(self, self.enemies_list[0], False):
@@ -155,10 +119,10 @@ class Player():
             self.rect.y += dy
 
 
-            # #Check if the player move away from screen
-            # if self.rect.bottom > screen_height:
-            #     self.rect.bottom = screen_height
-            #     dy = 0
+        # #Check if the player move away from screen
+        # if self.rect.bottom > screen_height:
+        #     self.rect.bottom = screen_height
+        #     dy = 0
         elif game_over == True:
             self.player = self.dead_image
             if self.rect.y > 100:
@@ -172,6 +136,49 @@ class Player():
         #draw a rect around char
         pygame.draw.rect(screen, (255,255,255), self.rect, 2)
         return game_over
+
+    def reset(self, x, y, enemies_list):
+
+        #Create a list for enemies
+        self.enemies_list = enemies_list
+
+        #create a blank list
+        self.images_right = []
+        self.images_left = []
+
+        #track list index
+        self.index = 0
+        self.counter = 0
+
+        #load the images
+        for num in range(1,5):
+            img_path = "img/guy" + str(num) + ".png"
+            img_right = pygame.image.load(img_path)
+
+            player_right = pygame.transform.scale(img_right,(40,80))
+
+            #flip image 
+            player_left = pygame.transform.flip(player_right, True, False)
+
+            self.images_right.append(player_right)
+            self.images_left.append(player_left)
+        
+
+        #ad a image for dead
+        self.dead_image = pygame.image.load("img/ghost.png")
+        #get images from list to display on screen
+        self.player = self.images_right[self.index]
+        self.rect = self.player.get_rect()
+
+        #get player position
+        self.rect.x = x
+        self.rect.y = y
+        self.width = self.player.get_width()
+        self.height = self.player.get_height()
+        self.player_jump_vel = 0
+        self.player_jumped = False
+        self.direction = "right"
+        self.in_air = True
         
 
         
