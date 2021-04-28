@@ -37,6 +37,7 @@ pygame.display.set_caption("A simple 2d Game")
 ## Define game variable
 tile_size = 50
 game_over = False
+main_menu = True
 
 
 
@@ -47,6 +48,8 @@ sky = pygame.image.load("img/sky.png")
 dirt = "img/dirt.png"
 grass = "img/dirt.png"
 restart_image = pygame.image.load("img/restart_btn.png")
+start_image = pygame.image.load("img/start_btn.png")
+exit_image = pygame.image.load("img/exit_btn.png")
 
 #Createing a function to display a grid on screen
 def draw_grid():
@@ -90,7 +93,8 @@ player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_g
 
 ## create menu
 restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) - 100, image = restart_image)
-
+start_button = Button(x = (screen_width // 2) - 350, y = (screen_height // 2), image = start_image)
+exit_button =  Button(x = (screen_width // 2) + 150, y = (screen_height // 2), image = exit_image)
 
 ## Create the main loop
 run = True
@@ -105,29 +109,39 @@ while run:
     screen.blit(source = sky, dest = (0,0))
     screen.blit(source = sun, dest = (100,100))
 
-    world.draw(screen = screen)
-    world.enemey_group.draw(screen)
-    world.lava_group.draw(screen)
-
-    #add move
-    world.enemey_group.update()
-    game_over = player.update_player_position(screen = screen, 
-                                  screen_width = screen_width, 
-                                  screen_height = screen_height,
-                                  world = world,
-                                  game_over = game_over)
     
-    #if play die draw restart button
-    if game_over == True:
-        if restart_button.draw(screen = screen):
-            #restart game again
-            player.reset(x = 100, 
-                         y = screen_height - 130, 
-                         enemies_list = [world.enemey_group, world.lava_group])
-            game_over = False
 
-   
+    if main_menu == True:
+        #load menu before draw world
+        if exit_button.draw(screen = screen):
+            run = False
+        if start_button.draw(screen = screen):
+            main_menu = False
     
+    else:
+        world.draw(screen = screen)
+        world.enemey_group.draw(screen)
+        world.lava_group.draw(screen)
+
+        #add move
+        world.enemey_group.update()
+        game_over = player.update_player_position(screen = screen, 
+                                    screen_width = screen_width, 
+                                    screen_height = screen_height,
+                                    world = world,
+                                    game_over = game_over)
+    
+        #if play die draw restart button
+        if game_over == True:
+            if restart_button.draw(screen = screen):
+                #restart game again
+                player.reset(x = 100, 
+                            y = screen_height - 130, 
+                            enemies_list = [world.enemey_group, world.lava_group])
+                game_over = False
+
+    
+        
     #add a way to close the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
