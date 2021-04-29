@@ -12,7 +12,7 @@ from pygame.locals import *
 from world import World
 from player import Player
 from button import Button
-from numpy import random
+import pickle
 
 ## Initialize pygame
 pygame.init()
@@ -51,6 +51,7 @@ restart_image = pygame.image.load("img/restart_btn.png")
 start_image = pygame.image.load("img/start_btn.png")
 exit_image = pygame.image.load("img/exit_btn.png")
 
+
 #Createing a function to display a grid on screen
 def draw_grid():
 	for line in range(0, 20):
@@ -59,30 +60,9 @@ def draw_grid():
 
 
 
-# the world could be as bigger as this list size
-
-world_data = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 1], 
-    [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 2, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 7, 0, 5, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 1], 
-    [1, 7, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 1], 
-    [1, 0, 2, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 2, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1], 
-    [1, 0, 0, 0, 0, 0, 2, 2, 2, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-]
+#load level data using pickle
+pickle_in = open("levels/level7_data", "rb")
+world_data = pickle.load(pickle_in)
 
 
 ## Create world
@@ -96,20 +76,20 @@ restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) -
 start_button = Button(x = (screen_width // 2) - 350, y = (screen_height // 2), image = start_image)
 exit_button =  Button(x = (screen_width // 2) + 150, y = (screen_height // 2), image = exit_image)
 
+
 ## Create the main loop
 run = True
 
 while run:
 
+
     #limit the pc to run the game a specific fps
     clock.tick(fps)
   
-    
     #draw the images on the screen
     screen.blit(source = sky, dest = (0,0))
     screen.blit(source = sun, dest = (100,100))
 
-    
 
     if main_menu == True:
         #load menu before draw world
@@ -117,7 +97,8 @@ while run:
             run = False
         if start_button.draw(screen = screen):
             main_menu = False
-    
+
+
     else:
         world.draw(screen = screen)
         world.enemey_group.draw(screen)
