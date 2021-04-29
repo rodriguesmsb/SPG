@@ -115,7 +115,7 @@ class Player():
             
             #check collision with exit
             if pygame.sprite.spritecollide(self, self.enemies_list[2], False):
-                game_over = 2
+                game_over = "passed"
 
                
                 

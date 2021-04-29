@@ -13,6 +13,7 @@ from world import World
 from player import Player
 from button import Button
 import pickle
+from os import path
 
 
 ## Initialize pygame
@@ -39,7 +40,8 @@ pygame.display.set_caption("A simple 2d Game")
 tile_size = 50
 game_over = False
 main_menu = True
-level = 8
+level = 0
+max_levels = 7
 
 
 
@@ -54,28 +56,46 @@ start_image = pygame.image.load("img/start_btn.png")
 exit_image = pygame.image.load("img/exit_btn.png")
 
 
+#function to reset level
+def reset_level(level):
+
+    
+
+    #create a new world
+    #load level data using pickle
+    if path.exists("levels/level{}_data".format(level)):
+        pickle_in = open("levels/level{}_data".format(level), "rb")
+        world_data = pickle.load(pickle_in)
+
+    world = World(data = world_data,  tile_size = tile_size)
+    #reset player
+    player.reset(x = 100,
+                 y = screen_height - 130, 
+                 enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
+       
+    return world
+
 #Createing a function to display a grid on screen
-def draw_grid():
-	for line in range(0, 20):
-		pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
-		pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
+# def draw_grid():
+# 	for line in range(0, 20):
+# 		pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
+# 		pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
 
 
-
-#load level data using pickle
-try:
-    pickle_in = open("levels/level{}_data".format(level), "rb")
-    world_data = pickle.load(pickle_in)
-except:
-    pickle_in = open("levels/level1_data".format(level), "rb")
-    world_data = pickle.load(pickle_in)
 
 
 ## Create world
+## world = World(data = world_data,  tile_size = tile_size)
+if path.exists("levels/level{}_data".format(level)):
+    pickle_in = open("levels/level{}_data".format(level), "rb")
+    world_data = pickle.load(pickle_in)
+
 world = World(data = world_data,  tile_size = tile_size)
+
 
 ## Create player
 player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
+
 
 ## create menu
 restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) - 100, image = restart_image)
@@ -87,7 +107,6 @@ exit_button =  Button(x = (screen_width // 2) + 150, y = (screen_height // 2), i
 run = True
 
 while run:
-
 
     #limit the pc to run the game a specific fps
     clock.tick(fps)
@@ -110,8 +129,10 @@ while run:
         world.enemey_group.draw(screen)
         world.lava_group.draw(screen)
         world.exit_group.draw(screen)
+        
         #add move
         world.enemey_group.update()
+
         game_over = player.update_player_position(screen = screen, 
                                     screen_width = screen_width, 
                                     screen_height = screen_height,
@@ -124,8 +145,28 @@ while run:
                 #restart game again
                 player.reset(x = 100, 
                             y = screen_height - 130, 
-                            enemies_list = [world.enemey_group, world.lava_group])
+                            enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
                 game_over = False
+        
+        #if play passed level
+        if game_over == "passed":
+            level += 1
+            if level <= max_levels:
+                #reset lvl
+                #clear lvl data
+                world_data = []
+                world = reset_level(level)
+                game_over = False
+            else:
+                #restart lvl
+                if restart_button.draw(screen = screen):
+                    level = 0
+                    world_data = []
+                    world = reset_level(level)
+                    game_over = False
+
+
+            
 
     
         
