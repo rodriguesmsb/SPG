@@ -14,6 +14,7 @@ from player import Player
 from button import Button
 import pickle
 
+
 ## Initialize pygame
 pygame.init()
 
@@ -38,6 +39,7 @@ pygame.display.set_caption("A simple 2d Game")
 tile_size = 50
 game_over = False
 main_menu = True
+level = 8
 
 
 
@@ -61,15 +63,19 @@ def draw_grid():
 
 
 #load level data using pickle
-pickle_in = open("levels/level7_data", "rb")
-world_data = pickle.load(pickle_in)
+try:
+    pickle_in = open("levels/level{}_data".format(level), "rb")
+    world_data = pickle.load(pickle_in)
+except:
+    pickle_in = open("levels/level1_data".format(level), "rb")
+    world_data = pickle.load(pickle_in)
 
 
 ## Create world
 world = World(data = world_data,  tile_size = tile_size)
 
 ## Create player
-player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group])
+player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
 
 ## create menu
 restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) - 100, image = restart_image)
@@ -103,7 +109,7 @@ while run:
         world.draw(screen = screen)
         world.enemey_group.draw(screen)
         world.lava_group.draw(screen)
-
+        world.exit_group.draw(screen)
         #add move
         world.enemey_group.update()
         game_over = player.update_player_position(screen = screen, 

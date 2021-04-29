@@ -7,7 +7,8 @@ Created on Thu Apr 15 2021
 """
 
 import pygame
-from enemey import Enemey, Lava
+from enemey import Enemey, Lava, Exit
+
 
 
 class World():
@@ -16,10 +17,11 @@ class World():
         self.tile_list = []
         self.enemey_group = pygame.sprite.Group()
         self.lava_group = pygame.sprite.Group()
+        self.exit_group = pygame.sprite.Group()
 
         dirt = pygame.image.load("img/dirt.png")
         grass = pygame.image.load("img/grass.png")
-        lava = pygame.image.load("img/lava.png")
+        
 
         tile_size = tile_size
 
@@ -48,12 +50,20 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+
                 if tile == 3:
                     blob = Enemey(x = col_count * tile_size, y = row_count * tile_size + 15)
                     self.enemey_group.add(blob)
+
                 if tile == 6:
                     lava = Lava(x = col_count * tile_size, y = row_count * tile_size + (tile_size // 2), tile_size = tile_size)
                     self.lava_group.add(lava)
+                
+                if tile == 8:
+                    exit_inst = Exit(x = col_count * tile_size, y = row_count * tile_size - (tile_size // 2), tile_size = tile_size)
+                    self.exit_group.add(exit_inst)
+
+                
                    
 
                 col_count += 1
