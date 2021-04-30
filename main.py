@@ -12,6 +12,7 @@ from pygame.locals import *
 from world import World
 from player import Player
 from button import Button
+from word_elements import Coin
 import pickle
 from os import path
 
@@ -35,6 +36,11 @@ screen = pygame.display.set_mode(size = (screen_width, screen_height))
 
 pygame.display.set_caption("A simple 2d Game")
 
+## Define font
+font_score = pygame.font.SysFont("Bauhaus 93", 30)
+font_final = pygame.font.SysFont("Bauhaus 93", 70)
+font_ghost = pygame.font.SysFont("Bauhaus 93", 70)
+
 
 ## Define game variable
 tile_size = 50
@@ -42,6 +48,12 @@ game_over = False
 main_menu = True
 level = 0
 max_levels = 7
+score = 0
+
+## Define colors
+white = (255,255,255)
+blue = (0,0,255)
+red = "#8b0000"
 
 
 
@@ -56,11 +68,16 @@ start_image = pygame.image.load("img/start_btn.png")
 exit_image = pygame.image.load("img/exit_btn.png")
 
 
+#define a function to display text
+def draw_text(text, font, text_color, x, y):
+    image = font.render(text, True, text_color)
+    screen.blit(image, (x,y))
+
+
+
 #function to reset level
 def reset_level(level):
-
-    
-
+    score_coin = Coin(tile_size //2, tile_size //2, tile_size)
     #create a new world
     #load level data using pickle
     if path.exists("levels/level{}_data".format(level)):
@@ -68,10 +85,12 @@ def reset_level(level):
         world_data = pickle.load(pickle_in)
 
     world = World(data = world_data,  tile_size = tile_size)
+    world.coin_group.add(score_coin)
     #reset player
     player.reset(x = 100,
                  y = screen_height - 130, 
-                 enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
+                 enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group])
+    
        
     return world
 
@@ -94,7 +113,9 @@ world = World(data = world_data,  tile_size = tile_size)
 
 
 ## Create player
-player = Player(x = 100, y = screen_height - 130, enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
+player = Player(x = 100, 
+                y = screen_height - 130, 
+                enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group])
 
 
 ## create menu
@@ -102,6 +123,10 @@ restart_button = Button(x = (screen_width // 2) - 10, y = (screen_height // 2) -
 start_button = Button(x = (screen_width // 2) - 350, y = (screen_height // 2), image = start_image)
 exit_button =  Button(x = (screen_width // 2) + 150, y = (screen_height // 2), image = exit_image)
 
+
+## create dummy coin
+score_coin = Coin(tile_size //2, tile_size //2, tile_size)
+world.coin_group.add(score_coin)
 
 ## Create the main loop
 run = True
@@ -123,12 +148,22 @@ while run:
         if start_button.draw(screen = screen):
             main_menu = False
 
-
     else:
         world.draw(screen = screen)
+
+       
+        #update score
+        #check if the coin was collected
+        if pygame.sprite.spritecollide(player, world.coin_group, True):
+            score +=1
+        draw_text("X " + str(score), font_score, white, tile_size - 10, 15)
+        
         world.enemey_group.draw(screen)
         world.lava_group.draw(screen)
         world.exit_group.draw(screen)
+        world.coin_group.draw(screen)
+        
+        
         
         #add move
         world.enemey_group.update()
@@ -139,14 +174,16 @@ while run:
                                     world = world,
                                     game_over = game_over)
     
-        #if play die draw restart button
+        #if play has die draw restart button
         if game_over == True:
+            draw_text("You Died!", font_ghost, red, (screen_width//2) - 140, (screen_height//2))
             if restart_button.draw(screen = screen):
                 #restart game again
                 player.reset(x = 100, 
                             y = screen_height - 130, 
-                            enemies_list = [world.enemey_group, world.lava_group, world.exit_group])
+                            enemies_list = [world.enemey_group, world.lava_group, world.exit_group,world.coin_group])
                 game_over = False
+                score = 0
         
         #if play passed level
         if game_over == "passed":
@@ -158,12 +195,15 @@ while run:
                 world = reset_level(level)
                 game_over = False
             else:
+                #print a msg tell game end
+                draw_text("You Win!", font_final, blue, (screen_width//2) - 140, (screen_height//2))
                 #restart lvl
                 if restart_button.draw(screen = screen):
                     level = 0
                     world_data = []
                     world = reset_level(level)
                     game_over = False
+                    score = 0
 
 
             
