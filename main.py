@@ -9,6 +9,7 @@ Created on Thu Apr 15 2021
 ## Import necessary libraries
 import pygame
 from pygame.locals import *
+from pygame import mixer
 from world import World
 from player import Player
 from button import Button
@@ -16,6 +17,14 @@ from word_elements import Coin
 import pickle
 from os import path
 
+
+pygame.mixer.pre_init(44100, -16, 2, 512)
+
+#initialize pygame mixer
+mixer.init()
+
+
+## load background sound
 
 
 ## Initialize pygame
@@ -69,7 +78,10 @@ start_image = pygame.image.load("img/start_btn.png")
 exit_image = pygame.image.load("img/exit_btn.png")
 
 
-## load sounds
+## load background sound
+pygame.mixer.music.load("img/music.wav")
+pygame.mixer.music.play(-1,0.0,5000)
+
 
 #define a function to display text
 def draw_text(text, font, text_color, x, y):
@@ -149,11 +161,9 @@ while run:
             run = False
         if start_button.draw(screen = screen):
             main_menu = False
-
     else:
         world.draw(screen = screen)
 
-       
         #update score
 
         #check if the coin was collected
@@ -210,10 +220,7 @@ while run:
                     score = 0
 
 
-            
-
     
-        
     #add a way to close the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -64,13 +64,9 @@ class World():
                     coin = Coin(x = col_count * tile_size + (tile_size //2), y = row_count * tile_size + (tile_size // 2), tile_size = tile_size)
                     self.coin_group.add(coin)
 
-                
                 if tile == 8:
                     exit_inst = Exit(x = col_count * tile_size, y = row_count * tile_size - (tile_size // 2), tile_size = tile_size)
                     self.exit_group.add(exit_inst)
-
-                
-                   
 
                 col_count += 1
             row_count += 1
