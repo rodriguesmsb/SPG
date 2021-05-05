@@ -7,10 +7,30 @@ Created on Thu Apr 15 2021
 """
 
 import pygame
+from pygame import mixer
+
+
+
 
 class Player():
     def __init__(self, x, y, enemies_list):
         self.reset(x, y, enemies_list)
+
+        pygame.mixer.pre_init(44100, -16, 2, 512)
+
+        #initialize pygame mixer
+        mixer.init()
+
+        #load sound
+        self.jump_effect = pygame.mixer.Sound("img/jump.wav")
+        self.jump_effect.set_volume(0.5)
+
+        self.coin_effect = pygame.mixer.Sound("img/coin.wav")
+        self.coin_effect.set_volume(0.5)
+
+        self.dead_effect = pygame.mixer.Sound("img/game_over.wav")
+        self.dead_effect.set_volume(0.5)
+
 
     def update_player_position(self, screen, screen_width, screen_height, world, game_over):
 
@@ -42,6 +62,7 @@ class Player():
 
             #add jump evevent
             if key[pygame.K_SPACE] and self.player_jumped == False and self.in_air == False:
+                self.jump_effect.play()
                 self.player_jump_vel = -15
                 self.player_jumped = True
 
@@ -109,9 +130,11 @@ class Player():
             #check for collision with enemeis and lava
             if pygame.sprite.spritecollide(self, self.enemies_list[0], False):
                 game_over = True
+                self.dead_effect.play()
 
             if pygame.sprite.spritecollide(self, self.enemies_list[1], False):
                 game_over = True
+                self.dead_effect.play()
             
             #check collision with exit
             if pygame.sprite.spritecollide(self, self.enemies_list[2], False):

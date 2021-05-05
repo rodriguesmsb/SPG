@@ -17,6 +17,7 @@ import pickle
 from os import path
 
 
+
 ## Initialize pygame
 pygame.init()
 
@@ -68,11 +69,12 @@ start_image = pygame.image.load("img/start_btn.png")
 exit_image = pygame.image.load("img/exit_btn.png")
 
 
+## load sounds
+
 #define a function to display text
 def draw_text(text, font, text_color, x, y):
     image = font.render(text, True, text_color)
     screen.blit(image, (x,y))
-
 
 
 #function to reset level
@@ -153,9 +155,11 @@ while run:
 
        
         #update score
+
         #check if the coin was collected
         if pygame.sprite.spritecollide(player, world.coin_group, True):
             score +=1
+            player.coin_effect.play()
         draw_text("X " + str(score), font_score, white, tile_size - 10, 15)
         
         world.enemey_group.draw(screen)
