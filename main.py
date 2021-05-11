@@ -103,7 +103,7 @@ def reset_level(level):
     #reset player
     player.reset(x = 100,
                  y = screen_height - 130, 
-                 enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group])
+                 enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group, world.platform_group])
     
        
     return world
@@ -129,7 +129,7 @@ world = World(data = world_data,  tile_size = tile_size)
 ## Create player
 player = Player(x = 100, 
                 y = screen_height - 130, 
-                enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group])
+                enemies_list = [world.enemey_group, world.lava_group, world.exit_group, world.coin_group, world.platform_group])
 
 
 ## create menu
@@ -176,6 +176,7 @@ while run:
         world.lava_group.draw(screen)
         world.exit_group.draw(screen)
         world.coin_group.draw(screen)
+        world.platform_group.draw(screen)
         
         
         
@@ -195,7 +196,7 @@ while run:
                 #restart game again
                 player.reset(x = 100, 
                             y = screen_height - 130, 
-                            enemies_list = [world.enemey_group, world.lava_group, world.exit_group,world.coin_group])
+                            enemies_list = [world.enemey_group, world.lava_group, world.exit_group,world.coin_group, world.platform_group])
                 game_over = False
                 score = 0
         

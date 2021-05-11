@@ -7,7 +7,7 @@ Created on Thu Apr 15 2021
 """
 
 import pygame
-from word_elements import Enemey, Lava, Exit, Coin
+from word_elements import Enemey, Lava, Exit, Coin, Platform
 
 
 
@@ -19,6 +19,7 @@ class World():
         self.lava_group = pygame.sprite.Group()
         self.exit_group = pygame.sprite.Group()
         self.coin_group = pygame.sprite.Group()
+        self.platform_group = pygame.sprite.Group()
 
         dirt = pygame.image.load("img/dirt.png")
         grass = pygame.image.load("img/grass.png")
@@ -55,6 +56,14 @@ class World():
                 if tile == 3:
                     blob = Enemey(x = col_count * tile_size, y = row_count * tile_size + 15)
                     self.enemey_group.add(blob)
+                
+                if tile == 4:
+                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size)
+                    self.platform_group.add(platform)
+                
+                if tile == 5:
+                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size)
+                    self.platform_group.add(platform)
 
                 if tile == 6:
                     lava = Lava(x = col_count * tile_size, y = row_count * tile_size + (tile_size // 2), tile_size = tile_size)
