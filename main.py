@@ -182,6 +182,7 @@ while run:
         
         #add move
         world.enemey_group.update()
+        world.platform_group.update()
 
         game_over = player.update_player_position(screen = screen, 
                                     screen_width = screen_width, 
