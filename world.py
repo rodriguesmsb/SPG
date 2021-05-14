@@ -58,11 +58,11 @@ class World():
                     self.enemey_group.add(blob)
                 
                 if tile == 4:
-                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size)
+                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size, move_x = 1, move_y = 0)
                     self.platform_group.add(platform)
                 
                 if tile == 5:
-                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size)
+                    platform = Platform(x = col_count * tile_size, y = row_count * tile_size, tile_size = tile_size, move_x = 0, move_y = 1)
                     self.platform_group.add(platform)
 
                 if tile == 6:
