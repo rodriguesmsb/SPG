@@ -13,8 +13,8 @@ from pygame import mixer
 
 
 class Player():
-    def __init__(self, x, y, enemies_list):
-        self.reset(x, y, enemies_list)
+    def __init__(self, x, y, word_elements):
+        self.reset(x, y, word_elements)
 
         pygame.mixer.pre_init(44100, -16, 2, 512)
 
@@ -128,16 +128,16 @@ class Player():
                         self.in_air = False
 
             #check for collision with enemeis and lava
-            if pygame.sprite.spritecollide(self, self.enemies_list[0], False):
+            if pygame.sprite.spritecollide(self, self.elements[0], False):
                 game_over = True
                 self.dead_effect.play()
 
-            if pygame.sprite.spritecollide(self, self.enemies_list[1], False):
+            if pygame.sprite.spritecollide(self, self.elements[1], False):
                 game_over = True
                 self.dead_effect.play()
             
             #check collision with exit
-            if pygame.sprite.spritecollide(self, self.enemies_list[2], False):
+            if pygame.sprite.spritecollide(self, self.elements[2], False):
                 game_over = "passed"
 
                
@@ -165,10 +165,10 @@ class Player():
         pygame.draw.rect(screen, (255,255,255), self.rect, 2)
         return game_over
 
-    def reset(self, x, y, enemies_list):
+    def reset(self, x, y, word_elements):
 
         #Create a list for enemies
-        self.enemies_list = enemies_list
+        self.elements = word_elements
 
         #create a blank list
         self.images_right = []

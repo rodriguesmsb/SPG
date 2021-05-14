@@ -77,8 +77,6 @@ class Platform(pygame.sprite.Sprite):
         self.rect.x += self.move_direction * self.move_x
         self.rect.y += self.move_direction * self.move_y
 
-
-        #check for collision
         self.move_counter += 1
         if abs(self.move_counter) > 50:
             self.move_direction *= -1
