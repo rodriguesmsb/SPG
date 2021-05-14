@@ -86,4 +86,4 @@ class World():
             screen.blit(tile[0], tile[1])
 
             #Add a rectangle at each img
-            pygame.draw.rect(screen, (255,255,255), tile[1], 2)
+            #pygame.draw.rect(screen, (255,255,255), tile[1], 2)

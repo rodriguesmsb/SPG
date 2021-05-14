@@ -43,6 +43,7 @@ class Player():
         dy = 0
         walk_speed  = 5
         game_over = game_over
+        col_treshold = 20
 
 
         if game_over == False:
@@ -136,11 +137,29 @@ class Player():
                 game_over = True
                 self.dead_effect.play()
             
-            #check collision with exit
+            #check for collision with exit
             if pygame.sprite.spritecollide(self, self.elements[2], False):
                 game_over = "passed"
 
-               
+            #check for collision with move plataforms
+            for plataform in self.elements[4]:
+                #collision in the x direction
+                if plataform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                    dx = 0
+                #collision in the y direction
+                if plataform.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                    #check if bellow plataform
+                    if abs((self.rect.top + dy) - plataform.rect.bottom) < col_treshold:
+                        self.player_jump_vel = 0
+                        dy = plataform.rect.bottom - self.rect.top
+                    #check if above plataform
+                    elif abs((self.rect.bottom + dy) - plataform.rect.top) < col_treshold:
+                        self.rect.bottom = plataform.rect.top - 1
+                        dy = 0
+                        self.in_air = False
+                    #move with plataform
+                    if plataform.move_x != 0:
+                        self.rect.x += plataform.move_direction
                 
             #update player coordinate
             self.rect.x += dx
@@ -162,7 +181,7 @@ class Player():
         screen.blit(self.player, self.rect)
 
         #draw a rect around char
-        pygame.draw.rect(screen, (255,255,255), self.rect, 2)
+        #pygame.draw.rect(screen, (255,255,255), self.rect, 2)
         return game_over
 
     def reset(self, x, y, word_elements):

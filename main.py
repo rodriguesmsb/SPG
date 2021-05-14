@@ -56,7 +56,7 @@ font_ghost = pygame.font.SysFont("Bauhaus 93", 70)
 tile_size = 50
 game_over = False
 main_menu = True
-level = 7
+level = 3
 max_levels = 7
 score = 0
 
