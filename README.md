@@ -9,3 +9,9 @@ The game was originally created by the user russs123. A series of video explain 
 The original code was made by  and can be found at https://github.com/russs123/Platformer.
 
 # How to run
+
+# To do
+
+- add last boss
+- add opening
+- add ending
